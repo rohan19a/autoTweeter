@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  twitteralltweets:
+    image: twitteralltweets
+    build:
+      context: .
+      dockerfile: ./Dockerfile
