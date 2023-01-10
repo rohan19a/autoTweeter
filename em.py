@@ -9,7 +9,7 @@ def send_email_gmail(subject, message, destination):
     password = 'vpxxovygzvsuvprc'
     sender = 'tweetupdaterbot@gmail.com'
     targets = [x for x in destination]
-    msg = MIMEText('Hi, how are you today?')
+    msg = MIMEText(message)
     msg['Subject'] = subject
     msg['From'] = sender
     msg['To'] = ', '.join(targets)
@@ -19,4 +19,3 @@ def send_email_gmail(subject, message, destination):
     server.sendmail(sender, targets, msg.as_string())
     server.quit()
 
-send_email_gmail('Test subject', 'This is the message', ['arohan19@gmail.com'])

@@ -2,15 +2,14 @@ import twint
 import difflib
 import pandas as pd
 
-def archive_all(user, c):
-    #adds all of a users tweet to a pandas dataframe
+def archive_all(user):
+    c = twint.Config()
     c.Username = user
     c.Pandas = True
     twint.run.Search(c)
-
     Tweets_df = twint.storage.panda.Tweets_df
-
-    print(Tweets_df['tweet'])
+    
+    return Tweets_df
 
 def is_updated(previousTweets_df, c):
     twint.run.Search(c)
@@ -39,7 +38,7 @@ def main():
     twint.run.Search(c)
 
     archive_all("arya_amsha", c)
-    
+
     Tweets_df = twint.storage.panda.Tweets_df
     clearScreen()
     Tweets_df.to_csv('tweets.csv', index=False)
@@ -55,4 +54,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    archive_all("arya_amsha")
