@@ -1,47 +1,34 @@
 import twint
 import difflib
+import pandas as pd
 
-
-
-
-
-def is_updated(previous, c):
+def archive_all(user, c):
+    #adds all of a users tweet to a pandas dataframe
+    c.Username = user
+    c.Pandas = True
     twint.run.Search(c)
 
-    ll = twint.storage.panda.Tweets_df
+    Tweets_df = twint.storage.panda.Tweets_df
 
-    with open('new.txt', 'w') as s:
-        for xx in ll:
-            s.write(xx)
-            s.write('\n')
+    print(Tweets_df['tweet'])
 
-    clearScreen()
-    
-    diff = differences(previous, ll)
-    print(diff)
-    
+def is_updated(previousTweets_df, c):
+    twint.run.Search(c)
 
-def differences(x, y):
+    Tweets_df = twint.storage.panda.Tweets_df
 
-    cases= [x, y]
+    #add a line called "hello" to Tweets_df['tweets']
 
-    for a,b in cases:     
-        print('{} => {}'.format(a,b))  
-        for i,s in enumerate(difflib.ndiff(a, b)):
-            if s[0]==' ': continue
-            elif s[0]=='-':
-                print(u'Delete "{}" from position {}'.format(s[-1],i))
-            elif s[0]=='+':
-                print(u'Add "{}" to position {}'.format(s[-1],i))    
-        print()
+    Tweets_df.insert()
 
-
+    if previousTweets_df.equals(Tweets_df):
+        return False
+    else:
+        return previousTweets_df['tweet'] - Tweets_df['tweet']
 
 def clearScreen():
     for x in range(10):
         print(" ")
-
-
 
 def main():
     c = twint.Config()
@@ -51,22 +38,21 @@ def main():
 
     twint.run.Search(c)
 
+    archive_all("arya_amsha", c)
+    
     Tweets_df = twint.storage.panda.Tweets_df
     clearScreen()
-    Tweets_df.sample(5)
     Tweets_df.to_csv('tweets.csv', index=False)
 
-    print(Tweets_df.id)
+    dif = is_updated(Tweets_df, c)
+    clearScreen()
 
-    l = Tweets_df['tweet']
+    if dif == False:
+        return False
+    else:
+        print(dif)
 
-    with open('info.txt', 'w') as f:
-        for x in l:
-            f.write(x)
-            f.write('\n')
-    print(l)
 
-    
 
 if __name__ == "__main__":
     main()
